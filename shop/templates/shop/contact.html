@@ -1,0 +1,52 @@
+{% extends 'shop/basic.html' %}
+
+{% block title %}Contact Us {% endblock %}
+{% block body %}
+<div class="col-md-6 col-sm-12">
+    <br>
+    <form name="freecontactform" method="post" action="/shop/contact/" >{% csrf_token %}
+        <table class="container">
+
+            <tr>
+                <td valign="top">
+                    <label for="Full_Name" class="name">Full Name<span class="required_star"> * </span></label>
+                </td>
+                <td valign="top">
+                    <input type="text" name="name" id="Full_Name" maxlength="80" style="width:230px">
+                </td>
+            </tr>
+            <tr>
+                <td valign="top">
+                    <label for="Email_Address" class="required">Email Address<span class="required_star"> * </span></label>
+                </td>
+                <td valign="top">
+                    <input type="text" name="email" id="Email_Address" maxlength="100" style="width:230px">
+                </td>
+            </tr>
+            <tr>
+                <td valign="top">
+                    <label for="Telephone_Number" class="not-required">Telephone Number</label>
+                </td>
+                <td valign="top">
+                    <input type="tel" name="mob" id="Telephone_Number" maxlength="100" style="width:230px">
+                </td>
+            </tr>
+            <tr>
+                <td valign="top">
+                    <label for="Your_Message" class="required">Your Message<span class="required_star"> * </span></label>
+                </td>
+                <td valign="top">
+                    <textarea style="width:230px;height:160px" name="desc" id="Your_Message" maxlength="2000"></textarea>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2" style="text-align:center">
+                    <br><br>
+                    <input type="submit" value=" Submit Form " style="width:200px;height:40px>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+{% endblock %}

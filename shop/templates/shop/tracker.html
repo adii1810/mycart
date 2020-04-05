@@ -1,0 +1,99 @@
+{% extends 'shop/basic.html' %}
+
+{% block title %}Tracker {% endblock %}
+{% block body %} 
+	
+<div class="container">
+	<div class="col my-4">
+		<h2> Step-1 My Awsome Cart Express Tracker - Enter Your Tracker Id And Email Address </h2>
+<form  method="post" action="#" id="trackerform">{% csrf_token %}
+  <div class="form-row">
+    
+    <div class="form-group col-md-6">
+      <label for="orderid">Order Id</label>
+      <input type="text" class="form-control" id="orderid" name="orderid" placeholder="Order Id">
+    </div>
+    <div class="form-group col-md-6">
+      <label for="email">Email</label>
+      <input type="email" class="form-control" id="email" name="email" placeholder="Email">
+    </div>
+    <button type="submit" class="btn btn-primary">Place Order</button>
+    </div>
+</form>
+	
+
+	<div class="col my-4 ">
+		<h2>	Step-2 Your Order Status </h2>
+		<div >
+				<ul class="list-group" id="items">
+				  
+				</ul>
+			</div>
+		
+		<h2 class="my-4">	Your Order Details </h2>
+		<div >
+				<ul class="list-group" id="citems">
+				  
+				</ul>
+			</div>
+		
+	</div>
+</div>
+	
+ {% endblock %}
+   {% block js %}
+ <script >
+ $('#trackerform').submit(function(event){
+    $('#items').empty();
+ 	var formdata={
+ 	'orderid': $('input[name=orderid]').val(),
+ 	'email': $('input[name=email]').val(),
+ 	'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+ 	};	
+	$.ajax({
+	 		type:'POST',
+	 		url:'/shop/tracker/',
+	 		data:formdata,
+	 		encode:true
+		})
+
+	 	.done(function(data){
+	 		data=JSON.parse(data);
+	 		updates=data[0];
+	 		if(updates.length>0 & updates!={})
+	 		{
+	 			for(i=0;i<updates.length;i++){
+					let text = updates[i]['text'];
+					let time = updates[i]['time'];
+					mystr = `<li class="list-group-item d-flex justify-content-between align-items-center">
+					    ${text}
+					    <span class="badge badge-primary badge-pill">${time}</span>
+						  </li>`
+				$('#items').append(mystr);
+				}
+			}
+	else{
+		mystr = `<li class="list-group-item d-flex justify-content-between align-items-center">
+					    sorry
+					    <span class="badge badge-primary badge-pill">sorry</span>
+					  </li>`
+		$('#items').append(mystr);	
+	}
+
+	//order details
+	cart=JSON.parse(data[1]);
+	console.log(cart);
+	for(item in cart){
+	let name = cart[item][1];
+	let qty = cart[item][0];
+	mystr = `<li class="list-group-item d-flex justify-content-between align-items-center">
+				    ${name}
+				    <span class="badge badge-primary badge-pill">${qty}</span>
+				  </li>`
+	$('#citems').append(mystr);
+}
+ });
+ event.preventDefault();
+ })
+   </script>
+   {% endblock %}
